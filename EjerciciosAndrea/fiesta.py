@@ -2,7 +2,7 @@ import sys
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QLabel, QCheckBox, QTextEdit, QPushButton,
-    QComboBox, QSlider, QGroupBox, QDial, QVBoxLayout, QHBoxLayout, QWidget
+    QComboBox, QSlider, QGroupBox, QDial, QVBoxLayout, QHBoxLayout, QWidget, QFileDialog
 )
 
 
@@ -18,7 +18,7 @@ class FiestraPrincipal(QMainWindow):
         # ----------------------
         self.tedCadroTexto = QTextEdit()
 
-        btnAbrirFich = QPushButton("Abrir ficheiro")
+        self.btnAbrirFich = QPushButton("Abrir ficheiro")
         btnReproducir = QPushButton("Reproducir ficheiro")
         btnGardar = QPushButton("Gardar")
         btnEliminar = QPushButton("Eliminar")
@@ -48,9 +48,13 @@ class FiestraPrincipal(QMainWindow):
         cmbSaidaAudio.addItems(["Altavoces", "Auriculares", "HDMI"])
 
         # ----------------------
+        # Conexión del botón "Abrir ficheiro"
+        # ----------------------
+        self.btnAbrirFich.clicked.connect(self.abrir_fichero)
+
+        # ----------------------
         # Layouts
         # ----------------------
-        # Layout principal vertical
         layoutPrincipal = QVBoxLayout()
 
         # Área de texto arriba
@@ -58,7 +62,7 @@ class FiestraPrincipal(QMainWindow):
 
         # Layout horizontal para botones principales
         layoutBotons = QHBoxLayout()
-        layoutBotons.addWidget(btnAbrirFich)
+        layoutBotons.addWidget(self.btnAbrirFich)
         layoutBotons.addWidget(btnReproducir)
         layoutBotons.addWidget(btnGardar)
         layoutBotons.addWidget(btnEliminar)
@@ -94,11 +98,23 @@ class FiestraPrincipal(QMainWindow):
         contenedor.setLayout(layoutPrincipal)
         self.setCentralWidget(contenedor)
 
+    # ----------------------
+    # Método para abrir archivo
+    # ----------------------
+    def abrir_fichero(self):
+        ruta, _ = QFileDialog.getOpenFileName(
+            self,
+            "Seleccionar archivo",
+            "",
+            "Todos los archivos (*);;Imágenes (*.png *.jpg *.jpeg);;Videos (*.mp4 *.avi *.mov)"
+        )
+        if ruta:
+            # Mostrar la ruta en el QTextEdit
+            self.tedCadroTexto.setText(ruta)
+
 
 if __name__ == "__main__":
     aplicacion = QApplication(sys.argv)
     fiestra = FiestraPrincipal()
     fiestra.show()
     sys.exit(aplicacion.exec())
-
-#algo
